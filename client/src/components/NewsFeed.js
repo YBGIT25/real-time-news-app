@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:5000');  // Connect to the backend WebSocket server
+const socket = io('https://real-time-news-app-02.onrender.com');
+
 
 function NewsFeed() {
   const [news, setNews] = useState([]);
