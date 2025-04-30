@@ -1,0 +1,30 @@
+openapi: 3.0.0
+info:
+  title: Real-Time News Feed API
+  version: 1.0.0
+paths:
+  /api/news/trending:
+    get:
+      summary: Get trending news categories
+      responses:
+        '200':
+          description: A list of trending categories
+  /api/news:
+    post:
+      summary: Add new news article
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+                category:
+                  type: string
+      responses:
+        '200':
+          description: Successfully created news

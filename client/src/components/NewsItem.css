@@ -1,0 +1,27 @@
+/* src/components/NewsItem.css */
+.news-item {
+    background: white;
+    margin-bottom: 1rem;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 5px solid #007bff;
+    transition: all 0.3s ease;
+  }
+  
+  .news-item:hover {
+    box-shadow: 0 2px 10px rgba(0, 123, 255, 0.2);
+  }
+  
+  .news-item h3 {
+    margin: 0 0 5px;
+  }
+  
+  .news-item p {
+    margin: 0 0 10px;
+  }
+  
+  .timestamp {
+    font-size: 0.8rem;
+    color: #555;
+  }
+  

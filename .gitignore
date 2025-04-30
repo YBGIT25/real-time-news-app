@@ -1,7 +1,8 @@
 # Ignore everything except project files
 /*
-!/frontend/
-!/backend/
+!/client/
+!/server/
+!/data/
 !Dockerfile
 !.dockerignore
 !docker-compose.yml
