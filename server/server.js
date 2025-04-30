@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -7,12 +8,7 @@ require('dotenv').config();
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server, { 
-  cors: { 
-    origin: 'https://real-time-news-app-02.onrender.com',
-    methods: ['GET', 'POST']
-  }
-});
+const io = socketIo(server, { cors: { origin: '*' } });
 
 mongoose.connect(process.env.MONGO_URI || 'mongodb://mongo:27017/news', {
   useNewUrlParser: true,
@@ -24,7 +20,7 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://mongo:27017/news', {
 app.use(cors());
 app.use(express.json());
 
-// Define mockNews globally
+// 👇 Declare mockNews globally
 const mockNews = [
   {
     title: 'Breaking Tech News: New AI Revolution!',
@@ -46,13 +42,17 @@ const mockNews = [
   },
 ];
 
-// WebSocket: Listen for category subscriptions and send data accordingly
+// WebSocket logic
 io.on('connection', (socket) => {
   console.log('New client connected');
 
   socket.on('subscribe', (category) => {
     socket.join(category);
     console.log(`Client subscribed to category: ${category}`);
+
+    // 🚀 When client subscribes, send current news immediately
+    const filteredNews = mockNews.filter(news => news.category === category);
+    socket.emit('news', filteredNews);
   });
 
   socket.on('disconnect', () => {
@@ -60,15 +60,19 @@ io.on('connection', (socket) => {
   });
 });
 
-// Push mock news every 5 seconds
-const pushMockNews = () => {
-  mockNews.forEach(news => {
+// Push new mock news every 5 seconds
+setInterval(() => {
+  const newMockNews = mockNews.map(news => ({
+    ...news,
+    timestamp: new Date()
+  }));
+
+  newMockNews.forEach(news => {
     io.to(news.category).emit('news', [news]);
   });
-};
-setInterval(pushMockNews, 5000);
+}, 5000);
 
-// API Route for fetching news
+// REST API to get news
 app.get('/api/news', (req, res) => {
   const category = req.query.category;
   if (!category) {
@@ -78,6 +82,4 @@ app.get('/api/news', (req, res) => {
   }
 });
 
-// IMPORTANT: use process.env.PORT
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(5000, () => console.log('Server running on port 5000'));
