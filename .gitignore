@@ -1,0 +1,10 @@
+# Ignore everything except project files
+/*
+!/frontend/
+!/backend/
+!Dockerfile
+!.dockerignore
+!docker-compose.yml
+!.gitignore
+!README.md
+!k8s/

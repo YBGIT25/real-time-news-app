@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    restart: always
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - "27017:27017"
+
+  backend:
+    build:
+      context: ./server
+    container_name: real-time-news-app-backend
+    restart: always
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/news
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+
+  frontend:
+    build:
+      context: ./client
+    container_name: real-time-news-app-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
